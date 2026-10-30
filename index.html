@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10243a">
+<title>Kademeli Emeklilik Haber Merkezi</title>
+<style>
+:root{--navy:#10243a;--blue:#1769aa;--red:#d94848;--gold:#f0b429;--bg:#f3f6fa;--ink:#172536;--muted:#687789;--line:#e2e8ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial}
+header{background:linear-gradient(125deg,#10243a,#174d76);color:#fff;padding:22px 16px 18px}
+.wrap{max-width:980px;margin:auto}.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}.logo{width:38px;height:38px;border-radius:12px;background:#fff;color:#174d76;display:grid;place-items:center;font-weight:900}
+.sub{color:#d5e4f2;margin:5px 0 16px;font-size:13px}
+.status{background:#fff;border-radius:14px;padding:14px 16px;color:var(--ink);box-shadow:0 6px 24px #061a2b22}
+.status strong{display:block;font-size:15px}.status p{margin:5px 0 0;color:#526173;font-size:13px}
+.statusline{display:flex;gap:8px;align-items:center;margin-bottom:6px}.dot{width:9px;height:9px;border-radius:50%;background:#d99b16}
+main{max-width:980px;margin:18px auto;padding:0 14px}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:13px}
+input,select,button{font:inherit;border-radius:10px;border:1px solid var(--line);padding:11px 12px;background:#fff;color:var(--ink)}
+input{flex:1;min-width:180px}select{min-width:145px}button{background:var(--blue);color:#fff;border:0;font-weight:700;cursor:pointer}
+button.secondary{background:#fff;color:var(--blue);border:1px solid #cbd9e7}
+.meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin:7px 2px 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;display:flex;flex-direction:column;min-height:180px;box-shadow:0 3px 12px #162b3c08}
+.tag{font-size:11px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;display:inline-flex;align-self:flex-start;border-radius:20px;padding:4px 8px;background:#e9f2fb;color:#155a91}
+.tag.official{background:#e7f6ed;color:#187344}.tag.proposal{background:#fff3d6;color:#8a5b00}.tag.claim{background:#fce9e9;color:#a52c2c}
+.card h2{font-size:16px;line-height:1.35;margin:10px 0 8px}.desc{font-size:13px;color:#536273;margin:0 0 12px}
+.cardfoot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.card a{color:var(--blue);text-decoration:none;font-weight:750}.card a:hover{text-decoration:underline}
+.empty{grid-column:1/-1;background:white;padding:25px;border-radius:14px;text-align:center;color:var(--muted)}
+.section{font-size:17px;margin:18px 2px 10px}.links{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0 20px}.links a{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--blue);font-size:13px;font-weight:700}
+footer{max-width:980px;margin:22px auto;padding:0 14px 28px;color:var(--muted);font-size:12px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.card{min-height:0}header{padding-top:18px}}
+</style></head>
+<body>
+<header><div class="wrap">
+<div class="brand"><div class="logo">KE</div><div>Kademeli Emeklilik Haber Merkezi</div></div>
+<div class="sub">1999 sonrası sigortalılar için haber, Meclis süreci ve resmî açıklama takibi</div>
+<div class="status">
+ <div class="statusline"><span class="dot"></span><strong>Resmî durum — 30 Ekim 2026 kontrolü</strong></div>
+ <p>Kontrol edilen TBMM kayıtlarında kademeli emeklilik düzenlemesi yasalaşmış görünmüyor. Bazı kanun teklifleri komisyonda. Teklifler, yürürlükteki kanun değildir.</p>
+</div>
+</div></header>
+<main>
+<h1 class="section">Son dakika gelişmeleri</h1>
+<div class="toolbar">
+<input id="q" type="search" placeholder="Haberlerde ara… (ör. 2000, TBMM, prim)">
+<select id="filter"><option value="all">Tüm gelişmeler</option><option value="official">Resmî kaynak</option><option value="proposal">Teklif / Meclis</option><option value="news">Haber kaynakları</option></select>
+<button id="refresh">↻ Haberleri güncelle</button>
+</div>
+<div class="meta"><span id="count">Haberler hazırlanıyor…</span><span id="updated">Son kontrol: —</span></div>
+<div class="grid" id="feed"><div class="empty">Haber akışı yükleniyor…</div></div>
+<h2 class="section">Doğrudan takip edilecek kaynaklar</h2>
+<div class="links">
+<a href="https://www.tbmm.gov.tr/Yasama/KanunTeklifleri" target="_blank" rel="noopener">TBMM kanun teklifleri ↗</a>
+<a href="https://www.tbmm.gov.tr/Denetim" target="_blank" rel="noopener">TBMM soru önergeleri ↗</a>
+<a href="https://www.csgb.gov.tr/" target="_blank" rel="noopener">Çalışma Bakanlığı ↗</a>
+<a href="https://www.sgk.gov.tr/" target="_blank" rel="noopener">SGK ↗</a>
+<a href="https://www.emadder.org/" target="_blank" rel="noopener">EMADDER ↗</a>
+</div>
+</main>
+<footer>Bilgilendirme amaçlı haber takip portalıdır; hukuki veya emeklilik danışmanlığı vermez. Haber başlıkları kaynaklarına aittir. Bir iddia, teklif veya kulis bilgisi resmî karar anlamına gelmez. Emeklilik şartları için SGK ve Resmî Gazete kayıtlarını esas alın.</footer>
+<script>
+const $=id=>document.getElementById(id);
+let articles=[];
+const seeds=[
+ {title:"2/3635 sayılı teklif: emekli aylıklarının prim gününe göre farklılaştırılması",source:"TBMM",date:"09.04.2026",type:"proposal",desc:"TBMM kaydında teklifin Plan ve Bütçe Komisyonunda olduğu belirtiliyor. Bu teklif doğrudan kademeli emeklilik yaş tablosu değildir.",url:"https://www.tbmm.gov.tr/Yasama/KanunTeklifi/346005c1-9caf-438c-969e-019d75faf97e"},
+ {title:"2/2959 sayılı teklif: kademeli emeklilik ve prim günleri",source:"TBMM",date:"03.03.2025",type:"proposal",desc:"İşçiler, memurlar ve sözleşmeli personel için kademeli emeklilik ve prim günlerinin düşürülmesi amaçlanıyor. Son durum: komisyonda.",url:"https://www.tbmm.gov.tr/Yasama/KanunTeklifi/7867990f-266c-4a18-a4b1-01955ffff04a"},
+ {title:"Kademeli emeklilik taleplerine ilişkin yazılı soru önergesi cevaplandı",source:"TBMM",date:"17.08.2026",type:"official",desc:"3 Haziran 2026 tarihli önergenin TBMM kayıtlarında cevaplanma bilgisi yer alıyor.",url:"https://tbmm.gov.tr/Denetim/Yazili-Soru-Onergesi-Detay/55739033-1d8d-4756-9ee0-019e8d8562e2"},
+ {title:"Kademeli emeklilik talebine ilişkin 4 Eylül 2026 tarihli önerge",source:"TBMM",date:"04.09.2026",type:"official",desc:"TBMM kaydında önergenin cevaplanmadığı bilgisi bulunuyor. Durum değişiklikleri resmî kayıttan izlenmeli.",url:"https://tbmm.gov.tr/Denetim/Yazili-Soru-Onergesi-Detay/d0adc0ec-626b-4e78-b951-01a07ab9e70e"},
+ {title:"Kademeli emeklilikte son durum: tekliflerin yasalaşma süreci",source:"Ekonomist",date:"21.10.2026",type:"news",desc:"Haberde tekliflerin komisyonda olduğu ve yürürlüğe girmiş yeni bir düzenleme bulunmadığı aktarılıyor.",url:"https://www.ekonomist.com.tr/ekonomi-haberleri/kademeli-emeklilik-cikacak-mi-ne-zaman-cikacak-meclis-te-son-durum-ne--80079"}
+];
+function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function tag(t){return t==="official"?'<span class="tag official">Resmî kayıt</span>':t==="proposal"?'<span class="tag proposal">Teklif / Meclis</span>':'<span class="tag">Haber</span>'}
+function render(){
+ const q=$("q").value.toLocaleLowerCase("tr"), f=$("filter").value;
+ const list=articles.filter(a=>(f==="all"||(f==="news"?a.type==="news":a.type===f)) && (a.title+" "+a.source+" "+(a.desc||"")).toLocaleLowerCase("tr").includes(q));
+ $("count").textContent=`${list.length} gelişme gösteriliyor`;
+ $("feed").innerHTML=list.length?list.map(a=>`<article class="card">${tag(a.type)}<h2>${esc(a.title)}</h2><p class="desc">${esc(a.desc||"Kaynak habere ulaşmak için başlığı açın.")}</p><div class="cardfoot"><span>${esc(a.source||"Haber kaynağı")} · ${esc(a.date||"Tarih belirtilmedi")}</span><a href="${esc(a.url)}" target="_blank" rel="noopener">Kaynağa git ↗</a></div></article>`).join(""):'<div class="empty">Bu filtrede haber bulunamadı. Arama kelimesini değiştirebilir veya haberleri güncelleyebilirsiniz.</div>';
+}
+async function refresh(){
+ $("refresh").disabled=true;$("refresh").textContent="Güncelleniyor…";
+ try{
+  const r=await fetch("/.netlify/functions/news",{cache:"no-store"});
+  if(!r.ok) throw new Error("Akış servisi yanıt vermedi");
+  const data=await r.json();
+  if(Array.isArray(data.items)&&data.items.length) articles=[...data.items,...seeds];
+  $("updated").textContent="Son kontrol: "+new Date().toLocaleString("tr-TR");
+ }catch(e){$("updated").textContent="Canlı akışa ulaşılamadı · kaynak bağlantıları gösteriliyor";}
+ articles=dedupe(articles);render();
+ $("refresh").disabled=false;$("refresh").textContent="↻ Haberleri güncelle";
+}
+function dedupe(arr){const seen=new Set();return arr.filter(x=>{const k=(x.url||x.title);if(seen.has(k))return false;seen.add(k);return true;});}
+$("q").addEventListener("input",render);$("filter").addEventListener("change",render);$("refresh").addEventListener("click",refresh);
+articles=seeds;render();refresh();
+</script></body></html>

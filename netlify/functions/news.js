@@ -15,17 +15,20 @@ exports.handler = async function () {
       const blocks = xml.match(/<item>([\s\S]*?)<\/item>/g) || [];
       for (const b of blocks) {
         const val = (tag) => {
-          const m = b.match(new RegExp('<' + tag + '>(.*?)</' + tag + '>', 's'));
+          const m = b.match(new RegExp('<' + tag + '[^>]*>(.*?)</' + tag + '>', 's'));
           return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, '').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>') : '';
         };
         const title = val('title');
         const link = val('link');
         const pub = val('pubDate');
         const source = val('source') || 'Google Haberler';
+        const sourceName = /^https?:\/\//i.test(source)
+          ? source.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')
+          : source;
         if (!title || !link) continue;
-        const low = title.toLocaleLowerCase('tr');
-        const type = /(tbmm|bakan|sgk|resmî|resmi|meclis)/i.test(source + ' ' + title) ? 'official' : 'news';
-        all.push({ title, url: link, source, date: pub ? new Date(pub).toLocaleDateString('tr-TR') : '', type, desc: 'Haber akışından alındı. İçeriğin ve iddiaların doğruluğu için kaynak haberi ve resmî kayıtları kontrol edin.' });
+        const official = /https:\/\/([^/]*\.)?(tbmm\.gov\.tr|resmigazete\.gov\.tr)\//i.test(link);
+        const type = official ? 'official' : 'news';
+        all.push({ title, url: link, source: sourceName, date: pub ? new Date(pub).toLocaleDateString('tr-TR') : '', type, desc: 'Haber akışından alındı. İçeriğin ve iddiaların doğruluğu için kaynak haberi ve resmî kayıtları kontrol edin.' });
       }
     } catch (_) {}
   }
